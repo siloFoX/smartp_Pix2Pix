@@ -25,9 +25,9 @@ discriminator = Discriminator()
 checkpoint_dir = './training_checkpoints'
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
-                                 discriminator_optimizer=discriminator_optimizer,
-                                 generator=generator,
-                                 discriminator=discriminator)
+                                discriminator_optimizer=discriminator_optimizer,
+                                generator=generator,
+                                discriminator=discriminator)
 
 train_dataset = tf.data.Dataset.list_files(PATH+'train/*.jpg')
 train_dataset = train_dataset.shuffle(BUFFER_SIZE)
@@ -71,8 +71,8 @@ def train(dataset, epochs):
         #    generate_images(generator, inp, tar)
 
         # saving (checkpoint) the model every 20 epochs
-        if (epoch + 1) % 20 == 0:
-            checkpoint.save(file_prefix = checkpoint_prefix)
+        #if (epoch + 1) % 20 == 0:
+        checkpoint.save(file_prefix = checkpoint_prefix)
 
         print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1, time.time()-start))
 

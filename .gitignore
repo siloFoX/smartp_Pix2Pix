@@ -1,6 +1,7 @@
-### folder ###
+### indivisual ###
 crack_data/
 test/
+training_checkpoints
 test.py
 
 ### Python ###
