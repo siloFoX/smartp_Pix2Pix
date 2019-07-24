@@ -2,9 +2,9 @@ import numpy as np
 import cv2
 import os
 
-train_path = 'data\\train'
-val_path = 'data\\val'
-test_path = 'data\\test'
+train_path = 'data\\train' # recommended 400
+val_path = 'data\\val' # recommended 100
+test_path = 'data\\test' # recommended 106
 
 row_size = 256
 column_size = 256
