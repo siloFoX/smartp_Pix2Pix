@@ -10,7 +10,7 @@ import time
 import os
 
 
-PATH = os.path.join(os.getcwd(), 'test\\')
+PATH = os.path.join(os.getcwd(), 'data\\')
 BUFFER_SIZE = 400
 BATCH_SIZE = 1
 EPOCHS = 1

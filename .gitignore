@@ -1,6 +1,6 @@
 ### indivisual ###
 crack_data/
-test/
+data/
 training_checkpoints
 test.py
 
