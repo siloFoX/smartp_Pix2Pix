@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 
-PATH = os.path.join(os.getcwd(), 'data\\')
+PATH = os.path.join(os.getcwd(), 'data/')
 IMG_WIDTH = 256
 IMG_HEIGHT = 256
 
