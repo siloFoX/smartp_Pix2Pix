@@ -82,11 +82,12 @@ def train(dataset, epochs):
 
         if is_training == discriminator.weights[0][0][0][0] :
             untrained += 1
-            print("UNTRAINED COUNT : {}" .format(untrained))
-        
         else :
             trained += 1
-            print("training count : {}" .format(trained))
+
+        print("training count : {}" .format(trained))
+        print("untrained count: {}" .format(untrained))
+    
 
 
 def main() :
