@@ -2,9 +2,9 @@ import numpy as np
 import cv2
 import os
 
-train_path = os.join('data', 'train') # recommended 400
-val_path = os.join('data', 'val') # recommended 100
-test_path = os.join('data', 'test') # recommended 106
+train_path = os.path.join('data', 'train') # recommended 400
+val_path = os.path.join('data', 'val') # recommended 100
+test_path = os.path.join('data', 'test') # recommended 106
 
 row_size = 256
 column_size = 256
@@ -30,6 +30,8 @@ def make_data (path) :
         path_tmp = os.path.join(path, datum)
         
         img_tmp = cv2.imread(path_tmp, cv2.IMREAD_COLOR)
+        #img_tmp = cv2.cvtColor(img_tmp, cv2.COLOR_GRAY2RGB)
+
         canny_img = canny_data(img_tmp)
 
         img_tmp = preprocessing(img_tmp, (row_size, column_size))

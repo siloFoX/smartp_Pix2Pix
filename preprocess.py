@@ -46,8 +46,8 @@ def random_jitter(input_image, real_image):
 
 
 def main() :
-    input_path = 'crack_data\\real_image'
-    output_path = 'crack_data\\input_image\\canny_data'
+    input_path = 'crack_data/real_image'
+    output_path = 'crack_data/input_image/canny_data'
     
     file_list = os.listdir(input_path)
     num_data = np.array(file_list).shape[0]

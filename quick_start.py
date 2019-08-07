@@ -61,7 +61,11 @@ def train_step(input_image, target):
 
 
 def train(dataset, epochs):
-    for epoch in range(epochs):
+    untrained = 0
+    trained = 0
+
+    for epoch in range(epochs) :
+        is_training = discriminator.weights[0][0][0][0]
         start = time.time()
 
         for input_image, target in dataset:
@@ -71,10 +75,18 @@ def train(dataset, epochs):
         #    generate_images(generator, inp, tar)
 
         # saving (checkpoint) the model every 20 epochs
-        #if (epoch + 1) % 20 == 0:
-        checkpoint.save(file_prefix = checkpoint_prefix)
+        if (epoch + 1) % 20 == 0:
+            checkpoint.save(file_prefix = checkpoint_prefix)
 
         print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1, time.time()-start))
+
+        if is_training == discriminator.weights[0][0][0][0] :
+            untrained += 1
+            print("UNTRAINED COUNT : {}" .format(untrained))
+        
+        else :
+            trained += 1
+            print("training count : {}" .format(trained))
 
 
 def main() :
