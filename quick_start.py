@@ -11,9 +11,12 @@ import os
 
 
 PATH = os.path.join(os.getcwd(), 'data/')
+WEIGHT_PATH = os.path.join(os.getcwd(), 'weights/')
+IS_LOAD = True
+LOAD_NUM = 1
 BUFFER_SIZE = 400
 BATCH_SIZE = 1
-EPOCHS = 1
+EPOCHS = 200
 
 
 generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
@@ -22,12 +25,15 @@ discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 generator = Generator()
 discriminator = Discriminator()
 
-checkpoint_dir = './training_checkpoints'
-checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
-checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
-                                discriminator_optimizer=discriminator_optimizer,
-                                generator=generator,
-                                discriminator=discriminator)
+# checkpoint_dir_generator = './training_checkpoints_generator'
+# checkpoint_prefix_generator = os.path.join(checkpoint_dir_generator, "ckpt")
+# checkpoint_generator = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
+#                                 generator=generator)
+                                
+# checkpoint_dir_discriminator = './training_checkpoints_discriminaotr'
+# checkpoint_prefix_discriminator = os.path.join(checkpoint_dir_discriminator, "ckpt")                                
+# checkpoint_discriminator = tf.train.Checkpoint(discriminator_optimizer=discriminator_optimizer,
+#                                 discriminator=discriminator)
 
 train_dataset = tf.data.Dataset.list_files(PATH+'train/*.jpg')
 train_dataset = train_dataset.shuffle(BUFFER_SIZE)
@@ -60,12 +66,8 @@ def train_step(input_image, target):
     discriminator_optimizer.apply_gradients(zip(discriminator_gradients, discriminator.trainable_variables))
 
 
-def train(dataset, epochs):
-    untrained = 0
-    trained = 0
-
+def train(dataset, epochs, weight_path = WEIGHT_PATH) :
     for epoch in range(epochs) :
-        is_training = discriminator.weights[0][0][0][0]
         start = time.time()
 
         for input_image, target in dataset:
@@ -74,23 +76,21 @@ def train(dataset, epochs):
         #for inp, tar in test_dataset.take(1):
         #    generate_images(generator, inp, tar)
 
-        # saving (checkpoint) the model every 20 epochs
-        if (epoch + 1) % 20 == 0:
-            checkpoint.save(file_prefix = checkpoint_prefix)
+        # saving (checkpoint) the model every 10 epochs
+        if (epoch + 1) % 10 == 0 :
+            path_tmp = os.path.join(weight_path, epoch + 1)
 
-        print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1, time.time()-start))
+            generator.save_weights(os.path.join(path_tmp, 'generator'))
+            discriminator.save_weights(os.path.join(path_tmp, 'discriminator'))
 
-        if is_training == discriminator.weights[0][0][0][0] :
-            untrained += 1
-        else :
-            trained += 1
-
-        print("training count : {}" .format(trained))
-        print("untrained count: {}" .format(untrained))
-    
+        print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1, time.time()-start))    
 
 
 def main() :
+    if IS_LOAD :
+        generator.load_weights(os.path.join(WEIGHT_PATH, str(LOAD_NUM) + '/generator'))
+        discriminator.load_weights(os.path.join(WEIGHT_PATH, str(LOAD_NUM) + '/discriminator'))
+
     train(train_dataset, EPOCHS)
 
     print("Congratulations!!!")

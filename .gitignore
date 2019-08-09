@@ -2,7 +2,9 @@
 crack_data/
 data/
 training_checkpoints
+training_checkpoints_from_dgx
 test.py
+weights
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
