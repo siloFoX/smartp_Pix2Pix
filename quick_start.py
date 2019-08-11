@@ -7,12 +7,14 @@ from model import generator_loss, discriminator_loss
 import tensorflow as tf
 import numpy as np
 import time
+import cv2
 import os
 
 
 PATH = os.path.join(os.getcwd(), 'data/')
 WEIGHT_PATH = os.path.join(os.getcwd(), 'weights/')
-IS_LOAD = True
+IMAGE_PATH = os.path.join(os.getcwd(), 'generated_images/')
+IS_LOAD = False
 LOAD_NUM = 1
 BUFFER_SIZE = 400
 BATCH_SIZE = 1
@@ -24,16 +26,6 @@ discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 
 generator = Generator()
 discriminator = Discriminator()
-
-# checkpoint_dir_generator = './training_checkpoints_generator'
-# checkpoint_prefix_generator = os.path.join(checkpoint_dir_generator, "ckpt")
-# checkpoint_generator = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
-#                                 generator=generator)
-                                
-# checkpoint_dir_discriminator = './training_checkpoints_discriminaotr'
-# checkpoint_prefix_discriminator = os.path.join(checkpoint_dir_discriminator, "ckpt")                                
-# checkpoint_discriminator = tf.train.Checkpoint(discriminator_optimizer=discriminator_optimizer,
-#                                 discriminator=discriminator)
 
 train_dataset = tf.data.Dataset.list_files(PATH+'train/*.jpg')
 train_dataset = train_dataset.shuffle(BUFFER_SIZE)
@@ -73,9 +65,6 @@ def train(dataset, epochs, weight_path = WEIGHT_PATH) :
         for input_image, target in dataset:
             train_step(input_image, target)
 
-        #for inp, tar in test_dataset.take(1):
-        #    generate_images(generator, inp, tar)
-
         # saving (checkpoint) the model every 10 epochs
         if (epoch + 1) % 10 == 0 :
             path_tmp = os.path.join(weight_path, epoch + 1)
@@ -83,7 +72,17 @@ def train(dataset, epochs, weight_path = WEIGHT_PATH) :
             generator.save_weights(os.path.join(path_tmp, 'generator'))
             discriminator.save_weights(os.path.join(path_tmp, 'discriminator'))
 
+            for inp, tar in test_dataset.take(1) :
+                generate_images(inp, epoch + 1)
+
         print ('Time taken for epoch {} is {} sec\n'.format(epoch + 1, time.time()-start))    
+
+
+def generate_images(inp, epoch_num) :
+    prediction = generator(inp, training = False)
+    img_tmp = np.array(prediction[0])
+    img_tmp = cv2.cvtColor(img_tmp * 0.5 + 0.5, cv2.COLOR_BGR2RGB)
+    cv2.imwrite(os.path.join(IMAGE_PATH, str(epoch_num)+".tiff"), img_tmp)
 
 
 def main() :

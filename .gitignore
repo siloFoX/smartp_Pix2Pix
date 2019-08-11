@@ -3,6 +3,7 @@ crack_data/
 data/
 training_checkpoints
 training_checkpoints_from_dgx
+generated_images
 test.py
 weights
 
