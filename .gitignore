@@ -1,6 +1,8 @@
 ### indivisual ###
 crack_data/
 data/
+image1/
+old_data/
 training_checkpoints
 training_checkpoints_from_dgx
 generated_images

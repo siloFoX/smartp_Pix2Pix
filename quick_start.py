@@ -14,8 +14,8 @@ import os
 PATH = os.path.join(os.getcwd(), 'data/')
 WEIGHT_PATH = os.path.join(os.getcwd(), 'weights/')
 IMAGE_PATH = os.path.join(os.getcwd(), 'generated_images/')
-IS_LOAD = False
-LOAD_NUM = 1
+IS_LOAD = False 
+LOAD_NUM = 200
 BUFFER_SIZE = 400
 BATCH_SIZE = 1
 EPOCHS = 200
@@ -67,7 +67,7 @@ def train(dataset, epochs, weight_path = WEIGHT_PATH) :
 
         # saving (checkpoint) the model every 10 epochs
         if (epoch + 1) % 10 == 0 :
-            path_tmp = os.path.join(weight_path, epoch + 1)
+            path_tmp = os.path.join(weight_path, str(epoch + 1))
 
             generator.save_weights(os.path.join(path_tmp, 'generator'))
             discriminator.save_weights(os.path.join(path_tmp, 'discriminator'))
@@ -83,6 +83,7 @@ def generate_images(inp, epoch_num) :
     img_tmp = np.array(prediction[0])
     img_tmp = cv2.cvtColor(img_tmp * 0.5 + 0.5, cv2.COLOR_BGR2RGB)
     cv2.imwrite(os.path.join(IMAGE_PATH, str(epoch_num)+".tiff"), img_tmp)
+    cv2.imwrite(os.path.join(IMAGE_PATH, str(epoch_num)+"_inp.tiff"), inp[0].numpy())
 
 
 def main() :
